@@ -1,0 +1,28 @@
+name: Skrypt Discord
+
+on:
+  schedule:
+    - cron: '*/15 * * * *' # Odpalaj co 15 minut
+  workflow_dispatch: # Pozwala odpalić ręcznie
+
+jobs:
+  run-bot:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Pobierz kod
+        uses: actions/checkout@v4
+
+      - name: Ustaw Pythona
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Instaluj biblioteki
+        run: pip install requests
+
+      - name: Uruchom skrypt
+        env:
+          USER_TOKEN: ${{ secrets.USER_TOKEN }}
+          CHANNEL_ID: ${{ secrets.CHANNEL_ID }}
+          WEBHOOK_URL: ${{ secrets.WEBHOOK_URL }}
+        run: python bot.py
